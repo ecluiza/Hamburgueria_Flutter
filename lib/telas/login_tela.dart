@@ -15,7 +15,7 @@ class _LoginTelaState extends State<LoginTela> {
   void _entrar() async {
     if (_controller.text.isNotEmpty) {
       await _service.salvarUsuario(_controller.text);
-      
+
       if (mounted) {
         Navigator.pushReplacementNamed(context, '/cardapio');
       }
@@ -32,7 +32,10 @@ class _LoginTelaState extends State<LoginTela> {
           children: [
             const Icon(Icons.fastfood, size: 100, color: Colors.orange),
             const SizedBox(height: 20),
-            const Text("Bem-vindo à Hamburgueria", style: TextStyle(fontSize: 24)),
+            const Text(
+              "Bem-vindo à Hamburgueria",
+              style: TextStyle(fontSize: 24),
+            ),
             const SizedBox(height: 40),
             TextField(
               controller: _controller,
@@ -42,14 +45,29 @@ class _LoginTelaState extends State<LoginTela> {
               ),
             ),
             const SizedBox(height: 20),
+
             ElevatedButton(
               onPressed: _entrar,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange,
                 minimumSize: const Size(double.infinity, 50),
               ),
-              child: const Text("ENTRAR", style: TextStyle(color: Colors.white)),
-            )
+              child: const Text(
+                "ENTRAR",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+
+            const SizedBox(height: 10),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/login-admin');
+              },
+              child: const Text(
+                "Acesso Administrativo",
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
           ],
         ),
       ),

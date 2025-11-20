@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'telas/login_tela.dart';
 import 'telas/cardapio_tela.dart';
 import 'telas/carrinho_tela.dart';
+import 'telas/admin_tela.dart';
+import 'telas/login_admin_tela.dart';
 
 void main() {
   runApp(const MeuApp());
@@ -24,6 +26,8 @@ class MeuApp extends StatelessWidget {
         '/': (context) => const LoginTela(),
         '/cardapio': (context) => const CardapioTela(),
         '/carrinho': (context) => const CarrinhoTela(),
+        '/admin': (context) => const AdminTela(),
+        '/login-admin': (context) => const LoginAdminTela(),
       },
     );
   }
