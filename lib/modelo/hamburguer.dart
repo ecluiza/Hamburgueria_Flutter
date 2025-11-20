@@ -1,5 +1,5 @@
 class Hamburguer {
-  final int id;
+  final int id; 
   final String nome;
   final double preco;
   final String imagem;
@@ -13,16 +13,16 @@ class Hamburguer {
 
   factory Hamburguer.fromJson(Map<String, dynamic> json) {
     return Hamburguer(
-      id: json['id'],
-      nome: json['nome'],
-      preco: (json['preco'] as num).toDouble(),
-      imagem: json['imagem'],
+      id: int.tryParse(json['id'].toString()) ?? 0,
+      nome: json['nome'] ?? 'Sem nome',
+      preco: double.tryParse(json['preco'].toString()) ?? 0.0,
+      imagem: json['imagem'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'id': id, 
       'nome': nome,
       'preco': preco,
       'imagem': imagem,
