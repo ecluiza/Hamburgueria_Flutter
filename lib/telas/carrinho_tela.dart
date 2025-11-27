@@ -32,7 +32,11 @@ class _CarrinhoTelaState extends State<CarrinhoTela> {
       _itens = [];
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Pedido enviado com sucesso!")),
+      SnackBar(
+        content: const Text("Pedido enviado para a cozinha!"),
+        backgroundColor: Colors.green[700],
+        behavior: SnackBarBehavior.floating,
+      ),
     );
   }
 
@@ -41,45 +45,108 @@ class _CarrinhoTelaState extends State<CarrinhoTela> {
     double total = _itens.fold(0, (soma, item) => soma + item.preco);
 
     return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
       appBar: AppBar(
-        title: const Text("Seu Carrinho"),
-        backgroundColor: Colors.orange,
+        title: const Text("Seu Pedido", style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold)),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black87),
+        centerTitle: true,
       ),
-      body: _itens.isEmpty
-          ? const Center(child: Text("Carrinho vazio :("))
-          : Column(
-              children: [
-                Expanded(
-                  child: ListView.builder(
+      body: Column(
+        children: [
+          Expanded(
+            child: _itens.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey[400]),
+                        const SizedBox(height: 16),
+                        Text("Seu carrinho está vazio", style: TextStyle(color: Colors.grey[600], fontSize: 18)),
+                      ],
+                    ),
+                  )
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
                     itemCount: _itens.length,
                     itemBuilder: (context, index) {
                       final item = _itens[index];
-                      return ListTile(
-                        leading: CircleAvatar(backgroundImage: NetworkImage(item.imagem)),
-                        title: Text(item.nome),
-                        trailing: Text("R\$ ${item.preco.toStringAsFixed(2)}"),
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.all(12),
+                          leading: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              item.imagem,
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                              errorBuilder: (ctx, obj, trace) => Container(
+                                width: 60, height: 60, color: Colors.grey[200],
+                                child: const Icon(Icons.fastfood, color: Colors.grey),
+                              ),
+                            ),
+                          ),
+                          title: Text(item.nome, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          subtitle: const Text("Ingredientes extras..."),
+                          trailing: Text(
+                            "R\$ ${item.preco.toStringAsFixed(2)}",
+                            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.orange, fontSize: 15),
+                          ),
+                        ),
                       );
                     },
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  color: Colors.orange[50],
-                  child: Row(
+          ),
+          if (_itens.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 20, offset: Offset(0, -5))],
+              ),
+              child: Column(
+                children: [
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Total: R\$ ${total.toStringAsFixed(2)}", 
-                           style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                      ElevatedButton(
-                        onPressed: _finalizarPedido,
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                        child: const Text("Finalizar", style: TextStyle(color: Colors.white)),
-                      )
+                      const Text("Total do Pedido", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                      Text("R\$ ${total.toStringAsFixed(2)}", style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     ],
                   ),
-                )
-              ],
-            ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _finalizarPedido,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        elevation: 0,
+                      ),
+                      child: const Text("FINALIZAR COMPRA", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+                    ),
+                  ),
+                ],
+              ),
+            )
+        ],
+      ),
     );
   }
 }
